@@ -5,20 +5,15 @@
 
     "ReplicatedStorage": {
       "Shared": {
-        "$path": "src/shared"
+        "$path": "src/flux"
       }
     },
 
-    "ServerScriptService": {
-      "Server": {
-        "$path": "src/server"
-      }
-    },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "Client": {
-          "$path": "src/client"
+          "$path": "src/tests"
         }
       }
     },
