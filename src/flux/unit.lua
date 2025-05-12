@@ -3,58 +3,43 @@
 
 local internalTypings = require(script.Parent.internalTypings)
 local util = require(script.Parent.util)
+local stateRegistry = require(script.Parent.stateRegistry)
 
 local unit = {}
 unit.__index = unit
 
 function unit.new(initialState: string): internalTypings.unit
-
-	-- create the class
 	local self: internalTypings.unit = setmetatable({
-		state = initialState, -- skip setting the state manually by doing it on creation
-		states = {} -- internal list of all states // MAKE PRIVATE
+		state = initialState,
 	}, unit)
 
-	-- defer until state is added
+	StateRegistry.init(self)
 	util.deferInitialEnter(self)
 
 	return self
 end
 
-
 function unit:addState(
 	name: string,
-	onEnter: (self: component?) -> ()?,
-	onExit: (self: component?) -> ()?
+	onEnter: (self: internalTypings.component?) -> ()?,
+	onExit: (self: internalTypings.component?) -> ()?
 ): ()
-
-	self.states[name] = {
-		onEnter = onEnter or function() end,
-		onExit = onExit or function() end
-	}
-
-	return
+	StateRegistry.setState(self, name, onEnter, onExit)
 end
 
 function unit:changeState(newState: string): ()
-	-- https://en.wikipedia.org/wiki/Idempotence
-	-- https://en.wikipedia.org/wiki/Guard_(computer_science)
 	if self.state == newState then return end
 
-	local current = self.states[self.state] :: internalTypings.component
+	local states = StateRegistry.get(self)
+
+	local current = states[self.state]
 	if current then current.onExit() end
 
 	self.state = newState
 
-	local nextState = self.states[newState] :: internalTypings.component
-	if nextState then
-		nextState.onEnter()
-	end
-
-	return
-
+	local next = states[self.state]
+	if next then next.onEnter() end
 end
 
-
-setmetatable(unit, {__call = unit.new})
+setmetatable(unit, { __call = unit.new })
 return table.freeze(unit)
