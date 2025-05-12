@@ -1,5 +1,5 @@
 --!strict
--- init.lua
+-- flux.lua
 
 local unit = require(script.unit)
 local internalTypings = require(script.internalTypings)
