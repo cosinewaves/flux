@@ -5,7 +5,7 @@
 
     "ReplicatedStorage": {
       "flux": {
-        "$path": "src/flux"
+        "$path": "flux"
       }
     }
 
