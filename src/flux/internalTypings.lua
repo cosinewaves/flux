@@ -4,7 +4,9 @@
 export type unit = {
   __index: unit,
   state: string,
+  states: { [string]: component },
 
+  -- Methods
   addState: (
     self: unit,
     name: string,
@@ -12,10 +14,11 @@ export type unit = {
     onExit: (self: component?) -> ()?
   ) -> (),
 
-  changeState: (
-    self: unit,
-    newState: string
-  ) -> ()
+  changeState: (self: unit, newState: string) -> (),
+
+  -- Subscription methods
+  subscribe: (self: unit, callback: (oldState: string, newState: string) -> ()) -> (),
+  unsubscribe: (self: unit, callback: (oldState: string, newState: string) -> ()) -> ()
 }
 
 export type component = {
