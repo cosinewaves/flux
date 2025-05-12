@@ -4,16 +4,8 @@
     "$className": "DataModel",
 
     "ReplicatedStorage": {
-      "Shared": {
+      "flux": {
         "$path": "src/flux"
-      }
-    },
-
-    "StarterPlayer": {
-      "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/tests"
-        }
       }
     }
 
