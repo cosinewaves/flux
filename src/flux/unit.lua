@@ -1,5 +1,8 @@
--- TO:DO add internal update function after unit.new
+--!strict
+-- unit.lua
+
 local internalTypings = require(script.Parent.internalTypings)
+local util = require(script.Parent.util)
 
 local unit = {}
 unit.__index = unit
@@ -12,9 +15,12 @@ function unit.new(initialState: string): internalTypings.unit
 		states = {} -- internal list of all states // MAKE PRIVATE
 	}, unit)
 
-	return self
+	-- defer until state is added
+	util.deferInitialEnter(self)
 
+	return self
 end
+
 
 function unit:addState(
 	name: string,
