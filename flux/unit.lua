@@ -1,17 +1,18 @@
 --!strict
 -- unit.lua
 
-local internalTypings = require(script.Parent.internalTypings)
-local util = require(script.Parent.util)
-local StateRegistry = require(script.Parent.stateRegistry)
-local errors = require(script.Parent.errors)
+-- dependencies
+local internalTypings = require(script.Parent.internalTypings :: ModuleScript)
+local util = require(script.Parent.util :: ModuleScript)
+local StateRegistry = require(script.Parent.stateRegistry :: ModuleScript)
+local errors = require(script.Parent.errors :: ModuleScript)
 
+-- internal metatable
 local unit = {}
 unit.__index = unit
 
--- Holds all the subscribed callbacks for state changes
-local stateChangeSubscribers = {}
-
+-- primary function to create a state-machine
+-- https://en.wikipedia.org/wiki/Finite-state_machine
 function unit.new(initialState: string): internalTypings.unit
 	if typeof(initialState) ~= "string" or initialState == "" then
 		errors.new("unit", "Initial state must be a non-empty string", 4)
@@ -19,6 +20,11 @@ function unit.new(initialState: string): internalTypings.unit
 
 	local self: internalTypings.unit = setmetatable({
 		state = initialState,
+		__subscribers = {},
+		__onceSubscribers = {},
+		__beforeChangeHooks = {},
+		__onEnterMiddleware = {},
+		__onExitMiddleware = {},
 	}, unit)
 
 	StateRegistry.init(self)
@@ -27,26 +33,49 @@ function unit.new(initialState: string): internalTypings.unit
 	return self
 end
 
--- Subscribe to state changes
 function unit:subscribe(callback: (oldState: string, newState: string) -> ())
-	table.insert(stateChangeSubscribers, callback)
+	table.insert(self.__subscribers, callback)
 end
 
--- Unsubscribe from state changes
 function unit:unsubscribe(callback: (oldState: string, newState: string) -> ())
-	for i, subscriber in ipairs(stateChangeSubscribers) do
-		if subscriber == callback then
-			table.remove(stateChangeSubscribers, i)
+	for i, cb in ipairs(self.__subscribers) do
+		if cb == callback then
+			table.remove(self.__subscribers, i)
 			break
 		end
 	end
 end
 
--- Notify all subscribers about state change
-local function notifySubscribers(oldState: string, newState: string)
-	for _, callback in ipairs(stateChangeSubscribers) do
-		callback(oldState, newState)
+-- lifecycle functions
+function unit:once(callback: (oldState: string, newState: string) -> ())
+	table.insert(self.__onceSubscribers, callback)
+	return
+end
+
+function unit:beforeChange(callback: (oldState: string, newState: string) -> boolean?)
+	table.insert(self.__beforeChangeHooks, callback)
+	return
+end
+
+function unit:onEnter(callback: (state: string) -> ())
+	table.insert(self.__onEnterMiddleware, callback)
+	return
+end
+
+function unit:onExit(callback: (state: string) -> ())
+	table.insert(self.__onExitMiddleware, callback)
+	return
+end
+
+local function notifySubscribers(self: internalTypings.unit, oldState: string, newState: string)
+	for _, callback in ipairs(self.__subscribers) do
+		task.spawn(callback, oldState, newState)
 	end
+	for _, callback in ipairs(self.__onceSubscribers) do
+		task.spawn(callback, oldState, newState)
+	end
+	self.__onceSubscribers = {}
+	return
 end
 
 function unit:addState(
@@ -59,12 +88,12 @@ function unit:addState(
 	end
 
 	local states = StateRegistry.get(self)
-
 	if states[name] then
 		errors.new("unit", `State '{name}' is already defined`, 3)
 	end
 
 	StateRegistry.setState(self, name, onEnter, onExit)
+	return
 end
 
 function unit:changeState(newState: string): ()
@@ -72,40 +101,46 @@ function unit:changeState(newState: string): ()
 		errors.new("unit", "New state must be a non-empty string", 4)
 	end
 
-	if self.state == newState then
-		return -- No-op: already in desired state
+	if self.state == newState then return end
+
+	for _, hook in ipairs(self.__beforeChangeHooks) do
+		local result = hook(self.state, newState)
+		if result == false then return end
 	end
 
 	local states = StateRegistry.get(self)
 
 	local current = states[self.state]
 	if current and current.onExit then
-		pcall(function()
-			current.onExit()
-		end)
-	else
-		errors.new("unit", `No onExit for current state '{self.state}'`, 2)
+		for _, middleware in ipairs(self.__onExitMiddleware) do
+			task.spawn(middleware, self.state)
+		end
+		pcall(current.onExit)
 	end
 
 	local oldState = self.state
 	self.state = newState
 
-	local next = states[self.state]
+	local next = states[newState]
 	if not next then
-		errors.new("unit", `Target state '{self.state}' does not exist`, 4)
+		errors.new("unit", `Target state '{newState}' does not exist`, 4)
 	end
 
 	if next.onEnter then
-		pcall(function()
-			next.onEnter()
-		end)
-	else
-		errors.new("unit", `No onEnter for new state '{self.state}'`, 2)
+		for _, middleware in ipairs(self.__onEnterMiddleware) do
+			task.spawn(middleware, newState)
+		end
+		pcall(next.onEnter)
 	end
 
-	-- Notify all subscribers about the state change
-	notifySubscribers(oldState, newState)
+	notifySubscribers(self, oldState, newState)
+	return
 end
 
-setmetatable(unit, { __call = unit.new })
+setmetatable(unit, {
+	__call = function(_, ...)
+		return unit.new(...)
+	end,
+})
+
 return table.freeze(unit)
