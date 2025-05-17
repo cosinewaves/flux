@@ -2,12 +2,14 @@
 -- util.lua
 
 local internalTypings = require(script.Parent.internalTypings)
+local StateRegistry = require(script.Parent.stateRegistry)
 
 local util = {}
 
 function util.deferInitialEnter(self: internalTypings.unit)
 	task.defer(function()
-		local stateData = self.states[self.state]
+		local states = StateRegistry.get(self)
+		local stateData = states[self.state]
 		if stateData and stateData.onEnter then
 			stateData.onEnter()
 		end

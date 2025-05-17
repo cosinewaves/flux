@@ -18,7 +18,7 @@ function unit.new(initialState: string): internalTypings.unit
 		state = initialState,
 	}, unit)
 
-	--util.deferInitialEnter(self)
+	util.deferInitialEnter(self)
 	StateRegistry.init(self)
 
 	return self
