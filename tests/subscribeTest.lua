@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local flux = require(ReplicatedStorage.flux)
 
-local unit = flux.unit("Off") -- getting error saying it's an empty string? possible: work on metatable __call function or something good luck future me
+local unit = flux.unit("Off")
 
 -- Subscribe to state changes
 unit:subscribe(function(oldState, newState)
