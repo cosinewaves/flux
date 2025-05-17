@@ -1,13 +1,13 @@
+--!strict
+-- unit.lua
+
 local internalTypings = require(script.Parent.internalTypings)
-local StateRegistry = require(script.Parent.stateRegistry)
 local util = require(script.Parent.util)
+local StateRegistry = require(script.Parent.stateRegistry)
 local errors = require(script.Parent.errors)
 
 local unit = {}
 unit.__index = unit
-
--- Subscribers for state change
-local stateChangeSubscribers = {}
 
 function unit.new(initialState: string): internalTypings.unit
 	if typeof(initialState) ~= "string" or initialState == "" then
@@ -16,31 +16,34 @@ function unit.new(initialState: string): internalTypings.unit
 
 	local self: internalTypings.unit = setmetatable({
 		state = initialState,
-		__pendingEnter = true -- internal flag to track initial enter
+		__subscribers = {}, -- Per-instance subscribers
 	}, unit)
 
 	StateRegistry.init(self)
+	util.deferInitialEnter(self)
 
 	return self
 end
 
-
+-- Subscribe to this unit's state changes
 function unit:subscribe(callback: (oldState: string, newState: string) -> ())
-	table.insert(stateChangeSubscribers, callback)
+	table.insert(self.__subscribers, callback)
 end
 
+-- Unsubscribe a listener from this unit
 function unit:unsubscribe(callback: (oldState: string, newState: string) -> ())
-	for i, subscriber in ipairs(stateChangeSubscribers) do
-		if subscriber == callback then
-			table.remove(stateChangeSubscribers, i)
+	for i, cb in ipairs(self.__subscribers) do
+		if cb == callback then
+			table.remove(self.__subscribers, i)
 			break
 		end
 	end
 end
 
-local function notifySubscribers(oldState: string, newState: string)
-	for _, callback in ipairs(stateChangeSubscribers) do
-		callback(oldState, newState)
+-- Internal notify function
+local function notifySubscribers(self: internalTypings.unit, oldState: string, newState: string)
+	for _, callback in ipairs(self.__subscribers) do
+		task.spawn(callback, oldState, newState)
 	end
 end
 
@@ -54,22 +57,12 @@ function unit:addState(
 	end
 
 	local states = StateRegistry.get(self)
-
 	if states[name] then
 		errors.new("unit", `State '{name}' is already defined`, 3)
 	end
 
 	StateRegistry.setState(self, name, onEnter, onExit)
-
-	-- If this state matches the initial state and it's pending, run onEnter
-	if name == self.state and self.__pendingEnter then
-		self.__pendingEnter = nil
-		if onEnter then
-			pcall(onEnter)
-		end
-	end
 end
-
 
 function unit:changeState(newState: string): ()
 	if typeof(newState) ~= "string" or newState == "" then
@@ -99,12 +92,13 @@ function unit:changeState(newState: string): ()
 		pcall(next.onEnter)
 	end
 
-	notifySubscribers(oldState, newState)
+	notifySubscribers(self, oldState, newState)
 end
 
--- ✅ This makes unit("Off") work!
-return setmetatable(unit, {
+setmetatable(unit, {
 	__call = function(_, ...)
 		return unit.new(...)
 	end,
 })
+
+return table.freeze(unit)
