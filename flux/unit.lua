@@ -16,13 +16,14 @@ function unit.new(initialState: string): internalTypings.unit
 
 	local self: internalTypings.unit = setmetatable({
 		state = initialState,
+		__pendingEnter = true -- internal flag to track initial enter
 	}, unit)
 
-	util.deferInitialEnter(self)
 	StateRegistry.init(self)
 
 	return self
 end
+
 
 function unit:subscribe(callback: (oldState: string, newState: string) -> ())
 	table.insert(stateChangeSubscribers, callback)
@@ -59,7 +60,16 @@ function unit:addState(
 	end
 
 	StateRegistry.setState(self, name, onEnter, onExit)
+
+	-- If this state matches the initial state and it's pending, run onEnter
+	if name == self.state and self.__pendingEnter then
+		self.__pendingEnter = nil
+		if onEnter then
+			pcall(onEnter)
+		end
+	end
 end
+
 
 function unit:changeState(newState: string): ()
 	if typeof(newState) ~= "string" or newState == "" then
