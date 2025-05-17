@@ -16,7 +16,11 @@ function unit.new(initialState: string): internalTypings.unit
 
 	local self: internalTypings.unit = setmetatable({
 		state = initialState,
-		__subscribers = {}, -- Per-instance subscribers
+		__subscribers = {},
+		__onceSubscribers = {},
+		__beforeChangeHooks = {},
+		__onEnterMiddleware = {},
+		__onExitMiddleware = {},
 	}, unit)
 
 	StateRegistry.init(self)
@@ -25,12 +29,10 @@ function unit.new(initialState: string): internalTypings.unit
 	return self
 end
 
--- Subscribe to this unit's state changes
 function unit:subscribe(callback: (oldState: string, newState: string) -> ())
 	table.insert(self.__subscribers, callback)
 end
 
--- Unsubscribe a listener from this unit
 function unit:unsubscribe(callback: (oldState: string, newState: string) -> ())
 	for i, cb in ipairs(self.__subscribers) do
 		if cb == callback then
@@ -40,11 +42,30 @@ function unit:unsubscribe(callback: (oldState: string, newState: string) -> ())
 	end
 end
 
--- Internal notify function
+function unit:once(callback: (oldState: string, newState: string) -> ())
+	table.insert(self.__onceSubscribers, callback)
+end
+
+function unit:beforeChange(callback: (oldState: string, newState: string) -> boolean?)
+	table.insert(self.__beforeChangeHooks, callback)
+end
+
+function unit:onEnter(callback: (state: string) -> ())
+	table.insert(self.__onEnterMiddleware, callback)
+end
+
+function unit:onExit(callback: (state: string) -> ())
+	table.insert(self.__onExitMiddleware, callback)
+end
+
 local function notifySubscribers(self: internalTypings.unit, oldState: string, newState: string)
 	for _, callback in ipairs(self.__subscribers) do
 		task.spawn(callback, oldState, newState)
 	end
+	for _, callback in ipairs(self.__onceSubscribers) do
+		task.spawn(callback, oldState, newState)
+	end
+	self.__onceSubscribers = {}
 end
 
 function unit:addState(
@@ -69,14 +90,20 @@ function unit:changeState(newState: string): ()
 		errors.new("unit", "New state must be a non-empty string", 4)
 	end
 
-	if self.state == newState then
-		return
+	if self.state == newState then return end
+
+	for _, hook in ipairs(self.__beforeChangeHooks) do
+		local result = hook(self.state, newState)
+		if result == false then return end
 	end
 
 	local states = StateRegistry.get(self)
 
 	local current = states[self.state]
 	if current and current.onExit then
+		for _, middleware in ipairs(self.__onExitMiddleware) do
+			task.spawn(middleware, self.state)
+		end
 		pcall(current.onExit)
 	end
 
@@ -89,6 +116,9 @@ function unit:changeState(newState: string): ()
 	end
 
 	if next.onEnter then
+		for _, middleware in ipairs(self.__onEnterMiddleware) do
+			task.spawn(middleware, newState)
+		end
 		pcall(next.onEnter)
 	end
 
