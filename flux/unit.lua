@@ -1,15 +1,12 @@
---!strict
--- unit.lua
-
 local internalTypings = require(script.Parent.internalTypings)
-local util = require(script.Parent.util)
 local StateRegistry = require(script.Parent.stateRegistry)
+local util = require(script.Parent.util)
 local errors = require(script.Parent.errors)
 
 local unit = {}
 unit.__index = unit
 
--- Holds all the subscribed callbacks for state changes
+-- Subscribers for state change
 local stateChangeSubscribers = {}
 
 function unit.new(initialState: string): internalTypings.unit
@@ -21,18 +18,16 @@ function unit.new(initialState: string): internalTypings.unit
 		state = initialState,
 	}, unit)
 
+	--util.deferInitialEnter(self)
 	StateRegistry.init(self)
-	util.deferInitialEnter(self)
 
 	return self
 end
 
--- Subscribe to state changes
 function unit:subscribe(callback: (oldState: string, newState: string) -> ())
 	table.insert(stateChangeSubscribers, callback)
 end
 
--- Unsubscribe from state changes
 function unit:unsubscribe(callback: (oldState: string, newState: string) -> ())
 	for i, subscriber in ipairs(stateChangeSubscribers) do
 		if subscriber == callback then
@@ -42,7 +37,6 @@ function unit:unsubscribe(callback: (oldState: string, newState: string) -> ())
 	end
 end
 
--- Notify all subscribers about state change
 local function notifySubscribers(oldState: string, newState: string)
 	for _, callback in ipairs(stateChangeSubscribers) do
 		callback(oldState, newState)
@@ -73,39 +67,34 @@ function unit:changeState(newState: string): ()
 	end
 
 	if self.state == newState then
-		return -- No-op: already in desired state
+		return
 	end
 
 	local states = StateRegistry.get(self)
 
 	local current = states[self.state]
 	if current and current.onExit then
-		pcall(function()
-			current.onExit()
-		end)
-	else
-		errors.new("unit", `No onExit for current state '{self.state}'`, 2)
+		pcall(current.onExit)
 	end
 
 	local oldState = self.state
 	self.state = newState
 
-	local next = states[self.state]
+	local next = states[newState]
 	if not next then
-		errors.new("unit", `Target state '{self.state}' does not exist`, 4)
+		errors.new("unit", `Target state '{newState}' does not exist`, 4)
 	end
 
 	if next.onEnter then
-		pcall(function()
-			next.onEnter()
-		end)
-	else
-		errors.new("unit", `No onEnter for new state '{self.state}'`, 2)
+		pcall(next.onEnter)
 	end
 
-	-- Notify all subscribers about the state change
 	notifySubscribers(oldState, newState)
 end
 
-setmetatable(unit, { __call = unit.new })
-return table.freeze(unit)
+-- ✅ This makes unit("Off") work!
+return setmetatable(unit, {
+	__call = function(_, ...)
+		return unit.new(...)
+	end,
+})
