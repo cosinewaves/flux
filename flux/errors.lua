@@ -4,7 +4,7 @@
 local errors = {}
 
 local function format(sender: string, message: string)
-	return `[beta.{sender:lower()}] {message}.`
+	return `[flux.{sender:lower()}] {message}.`
 end
 
 function errors.new(sender: string, message: string, level: number): ()
