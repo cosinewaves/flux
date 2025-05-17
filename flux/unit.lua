@@ -1,14 +1,18 @@
 --!strict
 -- unit.lua
 
-local internalTypings = require(script.Parent.internalTypings)
-local util = require(script.Parent.util)
-local StateRegistry = require(script.Parent.stateRegistry)
-local errors = require(script.Parent.errors)
+-- dependencies
+local internalTypings = require(script.Parent.internalTypings :: ModuleScript)
+local util = require(script.Parent.util :: ModuleScript)
+local StateRegistry = require(script.Parent.stateRegistry :: ModuleScript)
+local errors = require(script.Parent.errors :: ModuleScript)
 
+-- internal metatable
 local unit = {}
 unit.__index = unit
 
+-- primary function to create a state-machine
+-- https://en.wikipedia.org/wiki/Finite-state_machine
 function unit.new(initialState: string): internalTypings.unit
 	if typeof(initialState) ~= "string" or initialState == "" then
 		errors.new("unit", "Initial state must be a non-empty string", 4)
@@ -42,20 +46,25 @@ function unit:unsubscribe(callback: (oldState: string, newState: string) -> ())
 	end
 end
 
+-- lifecycle functions
 function unit:once(callback: (oldState: string, newState: string) -> ())
 	table.insert(self.__onceSubscribers, callback)
+	return
 end
 
 function unit:beforeChange(callback: (oldState: string, newState: string) -> boolean?)
 	table.insert(self.__beforeChangeHooks, callback)
+	return
 end
 
 function unit:onEnter(callback: (state: string) -> ())
 	table.insert(self.__onEnterMiddleware, callback)
+	return
 end
 
 function unit:onExit(callback: (state: string) -> ())
 	table.insert(self.__onExitMiddleware, callback)
+	return
 end
 
 local function notifySubscribers(self: internalTypings.unit, oldState: string, newState: string)
@@ -66,6 +75,7 @@ local function notifySubscribers(self: internalTypings.unit, oldState: string, n
 		task.spawn(callback, oldState, newState)
 	end
 	self.__onceSubscribers = {}
+	return
 end
 
 function unit:addState(
@@ -83,6 +93,7 @@ function unit:addState(
 	end
 
 	StateRegistry.setState(self, name, onEnter, onExit)
+	return
 end
 
 function unit:changeState(newState: string): ()
@@ -123,6 +134,7 @@ function unit:changeState(newState: string): ()
 	end
 
 	notifySubscribers(self, oldState, newState)
+	return
 end
 
 setmetatable(unit, {
