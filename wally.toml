@@ -1,0 +1,9 @@
+[package]
+name = "cosinewaves/flux"
+description = "lightweight and type-safe finite state machine"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+include = ["lib", "default.project.json"]
+
+[dependencies]
