@@ -4,15 +4,14 @@
 export type StateCallback = () -> ()?
 export type TransitionCallback<S> = (oldState: S, newState: S) -> ()
 
-export type Component = {
-	onEnter: StateCallback?,
-	onExit: StateCallback?,
-}
-
 export type State<S> = {
 	name: S,
 	onEnter: StateCallback?,
 	onExit: StateCallback?,
+	onBeforeEnter: StateCallback?, -- runs before entering a state
+	onAfterEnter: StateCallback?, -- runs after entering a state
+	onBeforeExit: StateCallback?, -- runs before leaving a state
+	onAfterExit: StateCallback?, -- runs after leaving a state
 }
 
 export type Unit<S> = {
