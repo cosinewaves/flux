@@ -1,0 +1,6 @@
+gitSourceBranch = "main"
+
+[[navbar.items]]
+href = "https://discord.com/channels/385151591524597761/1373594328966103051"
+label = "Discord"
+position = "right"
