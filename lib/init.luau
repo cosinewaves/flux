@@ -1,7 +1,7 @@
 --!strict
 --!native
 
-export type StateCallback = (self: Component?) -> ()?
+export type StateCallback = () -> ()?
 export type TransitionCallback<S> = (oldState: S, newState: S) -> ()
 
 export type Component = {
@@ -63,7 +63,7 @@ return function<S>(initialState: S): Unit<S>
 		-- exit old state
 		local oldState: State<S> = self.__states[old]
 		if oldState and oldState.onExit then
-			oldState.onExit(nil)
+			oldState.onExit()
 		end
 
 		-- update state
@@ -72,7 +72,7 @@ return function<S>(initialState: S): Unit<S>
 		-- enter new state
 		local newStateObj: State<S> = self.__states[newState]
 		if newStateObj and newStateObj.onEnter then
-			newStateObj.onEnter(nil)
+			newStateObj.onEnter()
 		end
 
 		-- notify subscribers
@@ -120,7 +120,7 @@ return function<S>(initialState: S): Unit<S>
 	task.defer(function(): ()
 		local initStateObj: State<S> = self.__states[self.state]
 		if initStateObj and initStateObj.onEnter then
-			initStateObj.onEnter(nil)
+			initStateObj.onEnter()
 		end
 		return
 	end)
