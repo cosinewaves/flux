@@ -43,6 +43,10 @@ return function<S>(initialState: S): Unit<S>
 	self.state = initialState
 	self.__states = {}
 	self.__subscribers = {}
+	self.__onBeforeEnterSubscribers = {}
+	self.__onBeforeExitSubscribers = {}
+	self.__onAfterEnterSubscribers = {}
+	self.__onAfterExitSubscribers = {}
 
 	self.addState = function(self: Unit<S>, state: State<S>): ()
 		self.__states[state.name] = state -- add the state to the internal state table
