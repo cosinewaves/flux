@@ -32,6 +32,13 @@ export type Unit<S> = {
 	__subscribers: { TransitionCallback<S> },
 }
 
+local function safeCall(cb: StateCallback?): ()
+	if cb then
+		cb()
+	end
+	return
+end
+
 return function<S>(initialState: S): Unit<S>
 	assert(initialState, "(flux) initialState resolved to false or nil")
 
