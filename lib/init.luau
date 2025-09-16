@@ -67,19 +67,40 @@ return function<S>(initialState: S): Unit<S>
 			return
 		end
 
-		-- exit old state
 		local oldState: State<S> = self.__states[old]
+
+		-- run before exit state
+		if oldState and oldState.onBeforeExit then
+			oldState.onBeforeExit()
+		end
+
+		-- exit old state
 		if oldState and oldState.onExit then
 			oldState.onExit()
+		end
+
+		-- on after exit
+		if oldState and oldState.onAfterExit then
+			oldState.onAfterExit()
 		end
 
 		-- update state
 		self.state = newState :: S
 
+		-- on after enter
+		if oldState and oldState.onBeforeEnter then
+			oldState.onBeforeEnter()
+		end
+
 		-- enter new state
 		local newStateObj: State<S> = self.__states[newState]
 		if newStateObj and newStateObj.onEnter then
 			newStateObj.onEnter()
+		end
+
+		-- on after enter
+		if oldState and oldState.onAfterEnter then
+			oldState.onAfterEnter()
 		end
 
 		-- notify subscribers
