@@ -34,7 +34,7 @@ export type Unit<S> = {
 }
 
 return function<S>(initialState: S): Unit<S>
-	assert(initialState, "(unit.create) initialState resolved to false or nil")
+	assert(initialState, "(flux) initialState resolved to false or nil")
 
 	local self = {} :: Unit<S>
 	self.state = initialState
