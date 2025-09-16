@@ -104,7 +104,6 @@ return function<S>(initialState: S): Unit<S>
 		end
 
 		-- notify subscribers
-		-- TODO: add lifecycles
 		for _, callback in self.__subscribers do
 			callback(old, newState)
 		end
