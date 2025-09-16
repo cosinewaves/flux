@@ -30,6 +30,10 @@ export type Unit<S> = {
 
 	__states: { [S]: State<S> },
 	__subscribers: { TransitionCallback<S> },
+	__onBeforeEnterSubscribers: { StateCallback },
+	__onBeforeExitSubscribers: { StateCallback },
+	__onAfterEnterSubscribers: { StateCallback },
+	__onAfterExitSubscribers: { StateCallback },
 }
 
 return function<S>(initialState: S): Unit<S>
