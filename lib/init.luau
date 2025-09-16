@@ -58,48 +58,29 @@ return function<S>(initialState: S): Unit<S>
 	end
 
 	self.changeState = function(self: Unit<S>, newState: S, eager: boolean?): ()
-		local old: S = self.state
-
-		-- lazy (default) → skip if states are the same
-		-- eager → always trigger transitions, even if states match
+		local old = self.state
 		if not eager and old == newState then
 			return
 		end
 
-		local oldState: State<S> = self.__states[old]
+		local oldState: State<S>? = self.__states[old]
+		local newStateObj: State<S>? = self.__states[newState]
 
-		-- run before exit state
-		if oldState and oldState.onBeforeExit then
-			oldState.onBeforeExit()
+		-- exit sequence
+		if oldState then
+			safeCall(oldState.onBeforeExit)
+			safeCall(oldState.onExit)
+			safeCall(oldState.onAfterExit)
 		end
 
-		-- exit old state
-		if oldState and oldState.onExit then
-			oldState.onExit()
-		end
-
-		-- on after exit
-		if oldState and oldState.onAfterExit then
-			oldState.onAfterExit()
-		end
-
-		-- update state
+		-- update
 		self.state = newState :: S
 
-		-- on after enter
-		if oldState and oldState.onBeforeEnter then
-			oldState.onBeforeEnter()
-		end
-
-		-- enter new state
-		local newStateObj: State<S> = self.__states[newState]
-		if newStateObj and newStateObj.onEnter then
-			newStateObj.onEnter()
-		end
-
-		-- on after enter
-		if oldState and oldState.onAfterEnter then
-			oldState.onAfterEnter()
+		-- enter sequence
+		if newStateObj then
+			safeCall(newStateObj.onBeforeEnter)
+			safeCall(newStateObj.onEnter)
+			safeCall(newStateObj.onAfterEnter)
 		end
 
 		-- notify subscribers
