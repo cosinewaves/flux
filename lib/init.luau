@@ -1,18 +1,17 @@
 --!strict
 --!native
 
-export type StateCallback = (self: Component?) -> ()?
+export type StateCallback = () -> ()?
 export type TransitionCallback<S> = (oldState: S, newState: S) -> ()
-
-export type Component = {
-	onEnter: StateCallback?,
-	onExit: StateCallback?,
-}
 
 export type State<S> = {
 	name: S,
 	onEnter: StateCallback?,
 	onExit: StateCallback?,
+	onBeforeEnter: StateCallback?, -- runs before entering a state
+	onAfterEnter: StateCallback?, -- runs after entering a state
+	onBeforeExit: StateCallback?, -- runs before leaving a state
+	onAfterExit: StateCallback?, -- runs after leaving a state
 }
 
 export type Unit<S> = {
@@ -33,6 +32,13 @@ export type Unit<S> = {
 	__subscribers: { TransitionCallback<S> },
 }
 
+local function safeCall(cb: StateCallback?): ()
+	if cb then
+		cb()
+	end
+	return
+end
+
 return function<S>(initialState: S): Unit<S>
 	assert(initialState, "(flux) initialState resolved to false or nil")
 
@@ -52,31 +58,32 @@ return function<S>(initialState: S): Unit<S>
 	end
 
 	self.changeState = function(self: Unit<S>, newState: S, eager: boolean?): ()
-		local old: S = self.state
-
-		-- lazy (default) → skip if states are the same
-		-- eager → always trigger transitions, even if states match
+		local old = self.state
 		if not eager and old == newState then
 			return
 		end
 
-		-- exit old state
-		local oldState: State<S> = self.__states[old]
-		if oldState and oldState.onExit then
-			oldState.onExit(nil)
+		local oldState: State<S>? = self.__states[old]
+		local newStateObj: State<S>? = self.__states[newState]
+
+		-- exit sequence
+		if oldState then
+			safeCall(oldState.onBeforeExit)
+			safeCall(oldState.onExit)
+			safeCall(oldState.onAfterExit)
 		end
 
-		-- update state
+		-- update
 		self.state = newState :: S
 
-		-- enter new state
-		local newStateObj: State<S> = self.__states[newState]
-		if newStateObj and newStateObj.onEnter then
-			newStateObj.onEnter(nil)
+		-- enter sequence
+		if newStateObj then
+			safeCall(newStateObj.onBeforeEnter)
+			safeCall(newStateObj.onEnter)
+			safeCall(newStateObj.onAfterEnter)
 		end
 
 		-- notify subscribers
-		-- TODO: add lifecycles
 		for _, callback in self.__subscribers do
 			callback(old, newState)
 		end
@@ -120,7 +127,7 @@ return function<S>(initialState: S): Unit<S>
 	task.defer(function(): ()
 		local initStateObj: State<S> = self.__states[self.state]
 		if initStateObj and initStateObj.onEnter then
-			initStateObj.onEnter(nil)
+			initStateObj.onEnter()
 		end
 		return
 	end)
