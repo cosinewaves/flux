@@ -32,6 +32,15 @@ export type State<S> = {
 	onAfterExit: StateCallback?, -- runs after leaving a state
 }
 
+--- @interface Middleware<S>
+--- @within Unit
+--- @field beforeChange TransitionCallback<S>? -- Called before changing any state
+--- @field afterChange TransitionCallback<S>? -- Called after changing any state
+export type Middleware<S> = {
+	beforeChange: TransitionCallback<S>?,
+	afterChange: TransitionCallback<S>?,
+}
+
 --- @interface Unit<S>
 --- @within Unit
 --- @field state S -- The current state of the Unit
@@ -43,7 +52,7 @@ export type State<S> = {
 --- @field getStates (self: Unit<S>) -> { S } -- Returns all registered state names
 --- @field hasState (self: Unit<S>, stateName: S) -> boolean -- Returns true if a given state is registered
 --- @field reset (self: Unit<S>) -> () -- Resets the Unit back to its initial state
---- @field use (self: Unit<S>, beforeChange: TransitionCallback<S>, afterChange: TransitionCallback<S>) -- Middleware functions which act per machine, instead of per state
+--- @field use (self: Unit<S>, middleware: Middleware<S>) -- Middleware functions which act per machine, instead of per state
 
 export type Unit<S> = {
 	state: S,
@@ -59,7 +68,7 @@ export type Unit<S> = {
 	hasState: (self: Unit<S>, stateName: S) -> boolean,
 	reset: (self: Unit<S>) -> (),
 
-	use: (self: Unit<S>, beforeChange: TransitionCallback<S>?, afterChange: TransitionCallback<S>?) -> (),
+	use: (self: Unit<S>, middleware: Middleware<S>) -> (),
 
 	__states: { [S]: State<S> },
 	__subscribers: { TransitionCallback<S> },
