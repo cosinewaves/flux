@@ -58,6 +58,8 @@ export type Unit<S> = {
 	hasState: (self: Unit<S>, stateName: S) -> boolean,
 	reset: (self: Unit<S>) -> (),
 
+	use: (self: Unit<S>, beforeChange: TransitionCallback<S>?, afterChange: TransitionCallback<S>?) -> (),
+
 	__states: { [S]: State<S> },
 	__subscribers: { TransitionCallback<S> },
 }
