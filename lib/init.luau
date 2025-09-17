@@ -36,6 +36,7 @@ export type State<S> = {
 --- @within Unit
 --- @field beforeChange TransitionCallback<S>? -- Called before changing any state
 --- @field afterChange TransitionCallback<S>? -- Called after changing any state
+--- @field canTransition TransitionCallback<S>? -- Predicate function before changing any state
 export type Middleware<S> = {
 	beforeChange: TransitionCallback<S>?,
 	afterChange: TransitionCallback<S>?,
