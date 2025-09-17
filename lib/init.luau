@@ -128,23 +128,30 @@ return function<S>(initialState: S): Unit<S>
 	end
 
 	--[=[
-		Transitions the Unit from its current state to a new state.
+	Transitions the Unit from its current state to a new state.
 
-		**Sequence**:
-		1. Calls old state's lifecycle hooks: onBeforeExit → onExit → onAfterExit
-		2. Updates the Unit's state
-		3. Calls new state's lifecycle hooks: onBeforeEnter → onEnter → onAfterEnter
-		4. Notifies all subscribers of the transition
+	**Sequence**:
+	1. Runs all middleware `canTransition` checks.  
+	   - If any returns `false`, the transition is aborted.  
+	2. Calls old state's lifecycle hooks (safely wrapped in `pcall`):  
+	   `onBeforeExit → onExit → onAfterExit`  
+	3. Updates the Unit's `state` field.  
+	4. Calls new state's lifecycle hooks (safely wrapped in `pcall`):  
+	   `onBeforeEnter → onEnter → onAfterEnter`  
+	5. Notifies all subscribers of the transition.  
+	6. If any lifecycle or subscriber throws, middleware `onError` hooks are invoked.
 
-		**Note**: If the new state is not registered, lifecycle hooks are skipped, 
-		but the state value is still updated.
-		
-		@method removeState
-		@within Unit
-		@param newState S       
-		@param eager? boolean  -- true = eager , false = lazy (default)
-		@return ()
-	]=]
+	**Note**:  
+	- If the new state is not registered, lifecycle hooks are skipped, 
+	  but the `state` value is still updated.  
+	- `onError` middleware provides centralized error handling.  
+
+	@method changeState
+	@within Unit
+	@param newState S -- The state to transition into
+	@param eager? boolean -- true = force transition even if old == new, false = lazy (default)
+	@return ()
+]=]
 	self.changeState = function(self: Unit<S>, newState: S, eager: boolean?): ()
 		local old = self.state
 		if not eager and old == newState then
