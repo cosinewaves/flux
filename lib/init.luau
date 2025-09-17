@@ -79,13 +79,6 @@ export type Unit<S> = {
 	__middleware: { Middleware<S> },
 }
 
-local function safeCall(cb: StateCallback?): ()
-	if cb then
-		cb()
-	end
-	return
-end
-
 --[=[
 	@class Unit
 
