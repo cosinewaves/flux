@@ -41,6 +41,7 @@ export type Middleware<S> = {
 	beforeChange: TransitionCallback<S>?,
 	afterChange: TransitionCallback<S>?,
 	canTransition: TransitionCallback<S>?,
+	onError: (error: string) -> (),
 }
 
 --- @interface Unit<S>
