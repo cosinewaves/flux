@@ -93,6 +93,7 @@ return function<S>(initialState: S): Unit<S>
 	self.state = initialState
 	self.__states = {}
 	self.__subscribers = {}
+	self.__middleware = {}
 
 	--[=[
 		You can add a state to the state machine, which can then be entered and exited with optional lifecycle events.
