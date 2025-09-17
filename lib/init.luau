@@ -43,6 +43,7 @@ export type State<S> = {
 --- @field getStates (self: Unit<S>) -> { S } -- Returns all registered state names
 --- @field hasState (self: Unit<S>, stateName: S) -> boolean -- Returns true if a given state is registered
 --- @field reset (self: Unit<S>) -> () -- Resets the Unit back to its initial state
+--- @field use (self: Unit<S>, beforeChange: TransitionCallback<S>, afterChange: TransitionCallback<S>) -- Middleware functions which act per machine, instead of per state
 
 export type Unit<S> = {
 	state: S,
