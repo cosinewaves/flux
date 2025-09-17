@@ -265,6 +265,21 @@ return function<S>(initialState: S): Unit<S>
 		return
 	end
 
+	--[=[
+		Inserts a table of middleware into the machine. Middleware is different from lifecycles
+		because it behaves per-machine, whereas lifecycle events behave per state.
+
+
+		@method use
+		@within Unit
+		@param middleware Middleware<S>
+		@return ()
+	]=]
+	self.use = function(self: Unit<S>, middleware: Middleware<S>): ()
+		table.insert(self.__middleware, middleware)
+		return
+	end
+
 	-- defer initial state onEnter
 	task.defer(function(): ()
 		local initStateObj: State<S> = self.__states[self.state]
