@@ -6,8 +6,8 @@
 <title data-rh="true">Unit | flux</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://cosinewaves.github.io/flux/api/Unit"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Unit | flux"><meta data-rh="true" name="description" content="Unit&#x27;s serve as a state machine within Flux. They contain internal tables holding state and subscribers,
 and also handle functions like subscription callbacks and changing states. "><meta data-rh="true" property="og:description" content="Unit&#x27;s serve as a state machine within Flux. They contain internal tables holding state and subscribers,
 and also handle functions like subscription callbacks and changing states. "><link data-rh="true" rel="canonical" href="https://cosinewaves.github.io/flux/api/Unit"><link data-rh="true" rel="alternate" href="https://cosinewaves.github.io/flux/api/Unit" hreflang="en"><link data-rh="true" rel="alternate" href="https://cosinewaves.github.io/flux/api/Unit" hreflang="x-default"><link rel="stylesheet" href="/flux/assets/css/styles.b9f2c64d.css">
-<script src="/flux/assets/js/runtime~main.41d79d08.js" defer="defer"></script>
-<script src="/flux/assets/js/main.c79615af.js" defer="defer"></script>
+<script src="/flux/assets/js/runtime~main.f401ec8c.js" defer="defer"></script>
+<script src="/flux/assets/js/main.1a4ac1f6.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();null!==e?t(e):window.matchMedia("(prefers-color-scheme: dark)").matches?t("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,t("light"))}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/flux/"><b class="navbar__title text--truncate">flux</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/flux/api/">API</a></div><div class="navbar__items navbar__items--right"><a href="https://discord.com/channels/385151591524597761/1373594328966103051" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><a href="https://github.com/cosinewaves/flux" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/flux/api/Unit">​Unit</a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Unit</span></h1><div class="luaClassTags_EipM"></div><div>
@@ -25,7 +25,7 @@ and also handle functions like subscription callbacks and changing states. "><li
   A function called whenever the Unit transitions between states.
   Receives the previous state and the new state as parameters.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Unit&lt;S&gt;"><code style="text-decoration:none">Unit&lt;S&gt;</code><a href="#Unit&lt;S&gt;" class="hash-link" aria-label="Direct link to Unit&lt;S&gt;" title="Direct link to Unit&lt;S&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L46"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>Unit&lt;S&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>state<!-- -->: </code><code class="blue_P4bS">S</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Unit&lt;S&gt;"><code style="text-decoration:none">Unit&lt;S&gt;</code><a href="#Unit&lt;S&gt;" class="hash-link" aria-label="Direct link to Unit&lt;S&gt;" title="Direct link to Unit&lt;S&gt;">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L60"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>Unit&lt;S&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>state<!-- -->: </code><code class="blue_P4bS">S</code><span class="inlineDescription_G7Er">-- <span>
 <p>The current state of the Unit</p>
 </span></span></div><div><code>addState<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/flux/api/Unit">Unit</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>state<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code></div><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><span class="inlineDescription_G7Er">-- <span>
 <p>Register a new state with optional lifecycle callbacks</p>
@@ -43,7 +43,9 @@ and also handle functions like subscription callbacks and changing states. "><li
 <p>Returns true if a given state is registered</p>
 </span></span></div><div><code>reset<!-- -->: </code><code class="purple_ieR2">(</code><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/flux/api/Unit">Unit</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><span class="inlineDescription_G7Er">-- <span>
 <p>Resets the Unit back to its initial state</p>
-</span></span></div></div><code>}</code></div><div></div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="addState"><code style="text-decoration:none">addState</code><a href="#addState" class="hash-link" aria-label="Direct link to addState" title="Direct link to addState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L95"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">addState</code><code>(</code><code>state<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><h3>Types</h3><h3 class="anchor anchorWithStickyNavbar_LWe7" id="State&lt;S&gt;"><a href="#State&lt;S&gt;" class="hash-link" aria-label="Direct link to State&lt;S&gt;" title="Direct link to State&lt;S&gt;">​</a></h3><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>State&lt;S&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">S</code><span class="inlineDescription_G7Er">-- <span>
+</span></span></div><div><code>use<!-- -->: </code><code class="purple_ieR2">(</code><div class="inset_uKQm"><code>self<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/flux/api/Unit">Unit</a></code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>middleware<!-- -->: </code><code class="blue_P4bS">Middleware</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code></div><code class="purple_ieR2">)</code><span class="inlineDescription_G7Er">-- <span>
+<p>Middleware functions which act per machine, instead of per state</p>
+</span></span></div></div><code>}</code></div><div></div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="addState"><code style="text-decoration:none">addState</code><a href="#addState" class="hash-link" aria-label="Direct link to addState" title="Direct link to addState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L106"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">addState</code><code>(</code><code>state<!-- -->: </code><code class="blue_P4bS">State</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><h3>Types</h3><h3 class="anchor anchorWithStickyNavbar_LWe7" id="State&lt;S&gt;"><a href="#State&lt;S&gt;" class="hash-link" aria-label="Direct link to State&lt;S&gt;" title="Direct link to State&lt;S&gt;">​</a></h3><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>State&lt;S&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">S</code><span class="inlineDescription_G7Er">-- <span>
 <p>The unique name of the state</p>
 </span></span></div><div><code>onEnter<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/flux/api/Unit#StateCallback">StateCallback?</a></code><span class="inlineDescription_G7Er">-- <span>
 <p>Called when entering the state</p>
@@ -59,24 +61,36 @@ and also handle functions like subscription callbacks and changing states. "><li
 <p>Called immediately after leaving the state</p>
 </span></span></div></div><code>}</code></div><div></div><div>
 <p>You can add a state to the state machine, which can then be entered and exited with optional lifecycle events.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="removeState"><code style="text-decoration:none">removeState</code><a href="#removeState" class="hash-link" aria-label="Direct link to removeState" title="Direct link to removeState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L108"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">removeState</code><code>(</code><code>stateName<!-- -->: </code><code class="blue_P4bS">S</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="removeState"><code style="text-decoration:none">removeState</code><a href="#removeState" class="hash-link" aria-label="Direct link to removeState" title="Direct link to removeState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L119"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">removeState</code><code>(</code><code>stateName<!-- -->: </code><code class="blue_P4bS">S</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>Removes a state from the internal registry</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="removeState"><code style="text-decoration:none">removeState</code><a href="#removeState" class="hash-link" aria-label="Direct link to removeState" title="Direct link to removeState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L131"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">removeState</code><code>(</code><div class="inset_uKQm"><div><code>newState<!-- -->: </code><code class="blue_P4bS">S</code><code>,</code></div><div><code>eager?<!-- -->: </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
-<p>true = eager , false = lazy (default)</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="changeState"><code style="text-decoration:none">changeState</code><a href="#changeState" class="hash-link" aria-label="Direct link to changeState" title="Direct link to changeState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L149"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">changeState</code><code>(</code><div class="inset_uKQm"><div><code>newState<!-- -->: </code><code class="blue_P4bS">S</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>The state to transition into</p>
+</span></span></div><div><code>eager?<!-- -->: </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p>true = force transition even if old == new, false = lazy (default)</p>
 </span></span></div></div><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>Transitions the Unit from its current state to a new state.</p>
 <p><strong>Sequence</strong>:</p>
 <ol>
-  <li>Calls old state's lifecycle hooks: onBeforeExit → onExit → onAfterExit</li>
-  <li>Updates the Unit's state</li>
-  <li>Calls new state's lifecycle hooks: onBeforeEnter → onEnter → onAfterEnter</li>
-  <li>Notifies all subscribers of the transition</li>
+  <li>Runs all middleware <code>canTransition</code> checks.
+    <ul>
+      <li>If any returns <code>false</code>, the transition is aborted.</li>
+    </ul>
+  </li>
+  <li>Calls old state's lifecycle hooks (safely wrapped in <code>pcall</code>):<br><code>onBeforeExit → onExit → onAfterExit</code></li>
+  <li>Updates the Unit's <code>state</code> field.</li>
+  <li>Calls new state's lifecycle hooks (safely wrapped in <code>pcall</code>):<br><code>onBeforeEnter → onEnter → onAfterEnter</code></li>
+  <li>Notifies all subscribers of the transition.</li>
+  <li>If any lifecycle or subscriber throws, middleware <code>onError</code> hooks are invoked.</li>
 </ol>
-<p>
-  <strong>Note</strong>: If the new state is not registered, lifecycle hooks are skipped,
-  but the state value is still updated.
-</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="subscribe"><code style="text-decoration:none">subscribe</code><a href="#subscribe" class="hash-link" aria-label="Direct link to subscribe" title="Direct link to subscribe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L180"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">subscribe</code><code>(</code><code>callback<!-- -->: </code><code class="blue_P4bS">TransitionCallback</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
+<p><strong>Note</strong>:</p>
+<ul>
+  <li>
+    If the new state is not registered, lifecycle hooks are skipped,
+    but the <code>state</code> value is still updated.
+  </li>
+  <li><code>onError</code> middleware provides centralized error handling.</li>
+</ul>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="subscribe"><code style="text-decoration:none">subscribe</code><a href="#subscribe" class="hash-link" aria-label="Direct link to subscribe" title="Direct link to subscribe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L227"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">subscribe</code><code>(</code><code>callback<!-- -->: </code><code class="blue_P4bS">TransitionCallback</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>Registers a callback to be invoked whenever the Unit changes state.</p>
 <p><strong>Sequence</strong>:</p>
 <ul>
@@ -89,7 +103,7 @@ and also handle functions like subscription callbacks and changing states. "><li
   <strong>Note</strong>: Callbacks should be pure functions without side effects that
   modify the Unit directly, to avoid unintended recursion.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="unsubscribe"><code style="text-decoration:none">unsubscribe</code><a href="#unsubscribe" class="hash-link" aria-label="Direct link to unsubscribe" title="Direct link to unsubscribe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L200"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">unsubscribe</code><code>(</code><div class="inset_uKQm"><div><code>callback<!-- -->: </code><code class="blue_P4bS">TransitionCallback</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="unsubscribe"><code style="text-decoration:none">unsubscribe</code><a href="#unsubscribe" class="hash-link" aria-label="Direct link to unsubscribe" title="Direct link to unsubscribe">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L247"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">unsubscribe</code><code>(</code><div class="inset_uKQm"><div><code>callback<!-- -->: </code><code class="blue_P4bS">TransitionCallback</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><span class="inlineDescription_G7Er">-- <span>
 <p>function(old: S, new: S) -> ()</p>
 </span></span></div></div><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>Unregisters a previously subscribed transition callback.</p>
@@ -102,18 +116,18 @@ and also handle functions like subscription callbacks and changing states. "><li
   <strong>Note</strong>: The callback reference must be the same function object
   that was passed to <code>subscribe</code>.
 </p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="getStates"><code style="text-decoration:none">getStates</code><a href="#getStates" class="hash-link" aria-label="Direct link to getStates" title="Direct link to getStates">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L219"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">getStates</code><code>(</code><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">S</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="getStates"><code style="text-decoration:none">getStates</code><a href="#getStates" class="hash-link" aria-label="Direct link to getStates" title="Direct link to getStates">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L266"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">getStates</code><code>(</code><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">S</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
 <p>array of state names</p>
 </span></span></div><div>
 <p>Returns a list of all registered state names in the Unit.</p>
 <p><strong>Note</strong>: The order of states in the returned list is not guaranteed.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="hasState"><code style="text-decoration:none">hasState</code><a href="#hasState" class="hash-link" aria-label="Direct link to hasState" title="Direct link to hasState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L235"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">hasState</code><code>(</code><div class="inset_uKQm"><div><code>stateName<!-- -->: </code><code class="blue_P4bS">S</code><span class="inlineDescription_G7Er">-- <span>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="hasState"><code style="text-decoration:none">hasState</code><a href="#hasState" class="hash-link" aria-label="Direct link to hasState" title="Direct link to hasState">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L282"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">hasState</code><code>(</code><div class="inset_uKQm"><div><code>stateName<!-- -->: </code><code class="blue_P4bS">S</code><span class="inlineDescription_G7Er">-- <span>
 <p>the state name to check</p>
 </span></span></div></div><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
 <p>true if the state is registered, false otherwise</p>
 </span></span></div><div>
 <p>Checks whether a state with the given name is registered in the Unit.</p>
-</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="reset"><code style="text-decoration:none">reset</code><a href="#reset" class="hash-link" aria-label="Direct link to reset" title="Direct link to reset">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L250"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">reset</code><code>(</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="reset"><code style="text-decoration:none">reset</code><a href="#reset" class="hash-link" aria-label="Direct link to reset" title="Direct link to reset">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L297"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">reset</code><code>(</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><div>
 <p>Resets the Unit back to its initial state.</p>
 <p><strong>Sequence</strong>:</p>
 <ul>
@@ -124,6 +138,19 @@ and also handle functions like subscription callbacks and changing states. "><li
     </p>
   </li>
 </ul>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="use"><code style="text-decoration:none">use</code><a href="#use" class="hash-link" aria-label="Direct link to use" title="Direct link to use">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/cosinewaves/flux/blob/main/lib/init.luau#L312"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Unit<!-- -->:</code><code class="green_DgR4">use</code><code>(</code><code>middleware<!-- -->: </code><code class="blue_P4bS">Middleware</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code>) → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code></div><h3>Types</h3><h3 class="anchor anchorWithStickyNavbar_LWe7" id="Middleware&lt;S&gt;"><a href="#Middleware&lt;S&gt;" class="hash-link" aria-label="Direct link to Middleware&lt;S&gt;" title="Direct link to Middleware&lt;S&gt;">​</a></h3><div class="memberString_GwaU"><code class="purple_ieR2">interface</code> <code>Middleware&lt;S&gt;<!-- --> <!-- -->{</code><div class="inset_uKQm"><div><code>beforeChange<!-- -->: </code><code class="blue_P4bS">TransitionCallback</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Called before changing any state</p>
+</span></span></div><div><code>afterChange<!-- -->: </code><code class="blue_P4bS">TransitionCallback</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Called after changing any state</p>
+</span></span></div><div><code>canTransition<!-- -->: </code><code class="blue_P4bS">TransitionCallback</code><code class="op_lSLc">&lt;</code><code class="blue_P4bS">S</code><code class="op_lSLc">&gt;</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Predicate function before changing any state</p>
+</span></span></div><div><code>onError<!-- -->: </code><code class="purple_ieR2">(</code><code>error<!-- -->: </code><code class="blue_P4bS">string</code><code class="purple_ieR2">)</code><code class="purple_ieR2"> → </code><code class="purple_ieR2">(</code><code class="purple_ieR2">)</code><code class="blue_P4bS">?,</code><span class="inlineDescription_G7Er">-- <span>
+<p>If changing the state errors, onError will be called with the error message for internal handling</p>
+</span></span></div></div><code>}</code></div><div></div><div>
+<p>
+  Inserts a table of middleware into the machine. Middleware is different from lifecycles
+  because it behaves per-machine, whereas lifecycle events behave per state.
+</p>
 </div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
     &quot;functions&quot;: [
         {
@@ -144,7 +171,7 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 95,
+                &quot;line&quot;: 106,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         },
@@ -166,22 +193,22 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 108,
+                &quot;line&quot;: 119,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         },
         {
-            &quot;name&quot;: &quot;removeState&quot;,
-            &quot;desc&quot;: &quot;Transitions the Unit from its current state to a new state.\n\n**Sequence**:\n1. Calls old state&#x27;s lifecycle hooks: onBeforeExit → onExit → onAfterExit\n2. Updates the Unit&#x27;s state\n3. Calls new state&#x27;s lifecycle hooks: onBeforeEnter → onEnter → onAfterEnter\n4. Notifies all subscribers of the transition\n\n**Note**: If the new state is not registered, lifecycle hooks are skipped, \nbut the state value is still updated.\n\n\t&quot;,
+            &quot;name&quot;: &quot;changeState&quot;,
+            &quot;desc&quot;: &quot;Transitions the Unit from its current state to a new state.\n\n**Sequence**:\n1. Runs all middleware `canTransition` checks.  \n   - If any returns `false`, the transition is aborted.  \n2. Calls old state&#x27;s lifecycle hooks (safely wrapped in `pcall`):  \n   `onBeforeExit → onExit → onAfterExit`  \n3. Updates the Unit&#x27;s `state` field.  \n4. Calls new state&#x27;s lifecycle hooks (safely wrapped in `pcall`):  \n   `onBeforeEnter → onEnter → onAfterEnter`  \n5. Notifies all subscribers of the transition.  \n6. If any lifecycle or subscriber throws, middleware `onError` hooks are invoked.\n\n**Note**:  \n- If the new state is not registered, lifecycle hooks are skipped, \n  but the `state` value is still updated.  \n- `onError` middleware provides centralized error handling.  &quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;newState&quot;,
-                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;desc&quot;: &quot;The state to transition into&quot;,
                     &quot;lua_type&quot;: &quot;S&quot;
                 },
                 {
                     &quot;name&quot;: &quot;eager?&quot;,
-                    &quot;desc&quot;: &quot;true = eager , false = lazy (default)&quot;,
+                    &quot;desc&quot;: &quot;true = force transition even if old == new, false = lazy (default)&quot;,
                     &quot;lua_type&quot;: &quot;boolean&quot;
                 }
             ],
@@ -193,7 +220,7 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 131,
+                &quot;line&quot;: 149,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         },
@@ -215,7 +242,7 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 180,
+                &quot;line&quot;: 227,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         },
@@ -237,7 +264,7 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 200,
+                &quot;line&quot;: 247,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         },
@@ -253,7 +280,7 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 219,
+                &quot;line&quot;: 266,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         },
@@ -275,7 +302,7 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 235,
+                &quot;line&quot;: 282,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         },
@@ -291,7 +318,29 @@ and also handle functions like subscription callbacks and changing states. "><li
             ],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 250,
+                &quot;line&quot;: 297,
+                &quot;path&quot;: &quot;lib/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;use&quot;,
+            &quot;desc&quot;: &quot;Inserts a table of middleware into the machine. Middleware is different from lifecycles\nbecause it behaves per-machine, whereas lifecycle events behave per state.\n\n\n\t&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;middleware&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Middleware&lt;S&gt;&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;()&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 312,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         }
@@ -362,6 +411,36 @@ and also handle functions like subscription callbacks and changing states. "><li
             }
         },
         {
+            &quot;name&quot;: &quot;Middleware&lt;S&gt;&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;fields&quot;: [
+                {
+                    &quot;name&quot;: &quot;beforeChange&quot;,
+                    &quot;lua_type&quot;: &quot;TransitionCallback&lt;S&gt;?&quot;,
+                    &quot;desc&quot;: &quot;Called before changing any state&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;afterChange&quot;,
+                    &quot;lua_type&quot;: &quot;TransitionCallback&lt;S&gt;?&quot;,
+                    &quot;desc&quot;: &quot;Called after changing any state&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;canTransition&quot;,
+                    &quot;lua_type&quot;: &quot;TransitionCallback&lt;S&gt;?&quot;,
+                    &quot;desc&quot;: &quot;Predicate function before changing any state&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;onError&quot;,
+                    &quot;lua_type&quot;: &quot;(error: string) -&gt; ()?,&quot;,
+                    &quot;desc&quot;: &quot;If changing the state errors, onError will be called with the error message for internal handling&quot;
+                }
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 41,
+                &quot;path&quot;: &quot;lib/init.luau&quot;
+            }
+        },
+        {
             &quot;name&quot;: &quot;Unit&lt;S&gt;&quot;,
             &quot;desc&quot;: &quot;&quot;,
             &quot;fields&quot;: [
@@ -409,10 +488,15 @@ and also handle functions like subscription callbacks and changing states. "><li
                     &quot;name&quot;: &quot;reset&quot;,
                     &quot;lua_type&quot;: &quot;(self: Unit&lt;S&gt;) -&gt; ()&quot;,
                     &quot;desc&quot;: &quot;Resets the Unit back to its initial state&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;use&quot;,
+                    &quot;lua_type&quot;: &quot;(self: Unit&lt;S&gt;, middleware: Middleware&lt;S&gt;)&quot;,
+                    &quot;desc&quot;: &quot;Middleware functions which act per machine, instead of per state&quot;
                 }
             ],
             &quot;source&quot;: {
-                &quot;line&quot;: 46,
+                &quot;line&quot;: 60,
                 &quot;path&quot;: &quot;lib/init.luau&quot;
             }
         }
@@ -420,9 +504,9 @@ and also handle functions like subscription callbacks and changing states. "><li
     &quot;name&quot;: &quot;Unit&quot;,
     &quot;desc&quot;: &quot;Unit&#x27;s serve as a state machine within Flux. They contain internal tables holding state and subscribers,\nand also handle functions like subscription callbacks and changing states. &quot;,
     &quot;source&quot;: {
-        &quot;line&quot;: 78,
+        &quot;line&quot;: 88,
         &quot;path&quot;: &quot;lib/init.luau&quot;
     }
-}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#State&lt;S&gt;" class="table-of-contents__link toc-highlight">State<s></s></a></li><li><a href="#StateCallback" class="table-of-contents__link toc-highlight">StateCallback</a></li><li><a href="#TransitionCallback&lt;S&gt;" class="table-of-contents__link toc-highlight">TransitionCallback<s></s></a></li><li><a href="#Unit&lt;S&gt;" class="table-of-contents__link toc-highlight">Unit<s></s></a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#addState" class="table-of-contents__link toc-highlight">:addState</a></li><li><a href="#getStates" class="table-of-contents__link toc-highlight">:getStates</a></li><li><a href="#hasState" class="table-of-contents__link toc-highlight">:hasState</a></li><li><a href="#removeState" class="table-of-contents__link toc-highlight">:removeState</a></li><li><a href="#removeState" class="table-of-contents__link toc-highlight">:removeState</a></li><li><a href="#reset" class="table-of-contents__link toc-highlight">:reset</a></li><li><a href="#subscribe" class="table-of-contents__link toc-highlight">:subscribe</a></li><li><a href="#unsubscribe" class="table-of-contents__link toc-highlight">:unsubscribe</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 cosinewaves. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a><ul><li><a href="#Middleware&lt;S&gt;" class="table-of-contents__link toc-highlight">Middleware<s></s></a></li><li><a href="#State&lt;S&gt;" class="table-of-contents__link toc-highlight">State<s></s></a></li><li><a href="#StateCallback" class="table-of-contents__link toc-highlight">StateCallback</a></li><li><a href="#TransitionCallback&lt;S&gt;" class="table-of-contents__link toc-highlight">TransitionCallback<s></s></a></li><li><a href="#Unit&lt;S&gt;" class="table-of-contents__link toc-highlight">Unit<s></s></a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#addState" class="table-of-contents__link toc-highlight">:addState</a></li><li><a href="#changeState" class="table-of-contents__link toc-highlight">:changeState</a></li><li><a href="#getStates" class="table-of-contents__link toc-highlight">:getStates</a></li><li><a href="#hasState" class="table-of-contents__link toc-highlight">:hasState</a></li><li><a href="#removeState" class="table-of-contents__link toc-highlight">:removeState</a></li><li><a href="#reset" class="table-of-contents__link toc-highlight">:reset</a></li><li><a href="#subscribe" class="table-of-contents__link toc-highlight">:subscribe</a></li><li><a href="#unsubscribe" class="table-of-contents__link toc-highlight">:unsubscribe</a></li><li><a href="#use" class="table-of-contents__link toc-highlight">:use</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 cosinewaves. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
