@@ -39,6 +39,7 @@ export type State<S> = {
 export type Middleware<S> = {
 	beforeChange: TransitionCallback<S>?,
 	afterChange: TransitionCallback<S>?,
+	canTransition: TransitionCallback<S>?,
 }
 
 --- @interface Unit<S>
