@@ -72,6 +72,7 @@ export type Unit<S> = {
 
 	__states: { [S]: State<S> },
 	__subscribers: { TransitionCallback<S> },
+	__middleware: { Middleware<S> },
 }
 
 local function safeCall(cb: StateCallback?): ()
