@@ -151,32 +151,61 @@ return function<S>(initialState: S): Unit<S>
 			return
 		end
 
-		local oldState: State<S>? = self.__states[old]
-		local newStateObj: State<S>? = self.__states[newState]
-
-		-- exit sequence
-		if oldState then
-			safeCall(oldState.onBeforeExit)
-			safeCall(oldState.onExit)
-			safeCall(oldState.onAfterExit)
+		-- check middleware guard
+		for _, mw in self.__middleware do
+			if mw.canTransition and not mw.canTransition(old, newState) then
+				return -- blocked
+			end
 		end
 
-		-- update
-		self.state = newState :: S
+		-- try actual transition
+		local success, err = pcall(function()
+			local oldStateObj = self.__states[old]
+			local newStateObj = self.__states[newState]
 
-		-- enter sequence
-		if newStateObj then
-			safeCall(newStateObj.onBeforeEnter)
-			safeCall(newStateObj.onEnter)
-			safeCall(newStateObj.onAfterEnter)
+			-- exit old
+			if oldStateObj then
+				if oldStateObj.onBeforeExit then
+					oldStateObj.onBeforeExit()
+				end
+				if oldStateObj.onExit then
+					oldStateObj.onExit()
+				end
+				if oldStateObj.onAfterExit then
+					oldStateObj.onAfterExit()
+				end
+			end
+
+			-- update
+			self.state = newState :: S
+
+			-- enter new
+			if newStateObj then
+				if newStateObj.onBeforeEnter then
+					newStateObj.onBeforeEnter()
+				end
+				if newStateObj.onEnter then
+					newStateObj.onEnter()
+				end
+				if newStateObj.onAfterEnter then
+					newStateObj.onAfterEnter()
+				end
+			end
+
+			-- notify subscribers
+			for _, callback in self.__subscribers do
+				callback(old, newState)
+			end
+		end)
+
+		-- handle error middleware
+		if not success then
+			for _, mw in self.__middleware do
+				if mw.onError then
+					mw.onError(err)
+				end
+			end
 		end
-
-		-- notify subscribers
-		for _, callback in self.__subscribers do
-			callback(old, newState)
-		end
-
-		return
 	end
 
 	--[=[
