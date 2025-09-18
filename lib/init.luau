@@ -197,9 +197,15 @@ return function<S>(initialState: S): Unit<S>
 
 		-- exit old state
 		if oldStateObj then
-			safeCall(self, oldStateObj.onBeforeExit, self)
-			safeCall(self, oldStateObj.onExit, self)
-			safeCall(self, oldStateObj.onAfterExit, self)
+			if oldStateObj.onBeforeExit then
+				safeCall(self, oldStateObj.onBeforeExit, self)
+			end
+			if oldStateObj.onExit then
+				safeCall(self, oldStateObj.onExit, self)
+			end
+			if oldStateObj.onAfterExit then
+				safeCall(self, oldStateObj.onAfterExit, self)
+			end
 		end
 
 		-- update current state
@@ -207,9 +213,15 @@ return function<S>(initialState: S): Unit<S>
 
 		-- enter new state
 		if newStateObj then
-			safeCall(self, newStateObj.onBeforeEnter, self)
-			safeCall(self, newStateObj.onEnter, self)
-			safeCall(self, newStateObj.onAfterEnter, self)
+			if newStateObj.onBeforeEnter then
+				safeCall(self, newStateObj.onBeforeEnter, self)
+			end
+			if newStateObj.onEnter then
+				safeCall(self, newStateObj.onEnter, self)
+			end
+			if newStateObj.onAfterEnter then
+				safeCall(self, newStateObj.onAfterEnter, self)
+			end
 		end
 
 		-- notify subscribers
