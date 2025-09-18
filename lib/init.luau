@@ -13,6 +13,12 @@ export type StateCallback = () -> ()?
 --- Receives the previous state and the new state as parameters.
 export type TransitionCallback<S> = (oldState: S, newState: S) -> ()
 
+--- @type TransitionCheck<S> (oldState: S, newState: S) -> boolean
+--- @within Unit
+--- A predicate function called before transitioning between states.
+--- If it returns false, the transition is aborted.
+export type TransitionCheck<S> = (oldState: S, newState: S) -> boolean
+
 --- @interface State<S>
 --- @within Unit
 --- @field name S -- The unique name of the state
@@ -41,7 +47,7 @@ export type State<S> = {
 export type Middleware<S> = {
 	beforeChange: TransitionCallback<S>?,
 	afterChange: TransitionCallback<S>?,
-	canTransition: TransitionCallback<S>?,
+	canTransition: TransitionCheck<S>?,
 	onError: (error: string) -> ()?,
 }
 
