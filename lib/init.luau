@@ -93,7 +93,7 @@ export type Unit<S> = {
 ]=]
 
 -- safely call a function with traceback
-local function safeCall(self, fn, ...)
+local function safeCall(self: Unit<any>, fn, ...)
 	if not fn then
 		return
 	end
