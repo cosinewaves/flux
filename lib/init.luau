@@ -43,12 +43,10 @@ export type State<S> = {
 --- @field beforeChange TransitionCallback<S>? -- Called before changing any state
 --- @field afterChange TransitionCallback<S>? -- Called after changing any state
 --- @field canTransition TransitionCallback<S>? -- Predicate function before changing any state
---- @field onError (error: string) -> ()?, -- If changing the state errors, onError will be called with the error message for internal handling
 export type Middleware<S> = {
 	beforeChange: TransitionCallback<S>?,
 	afterChange: TransitionCallback<S>?,
 	canTransition: TransitionCheck<S>?,
-	onError: (error: string) -> ()?,
 }
 
 --- @interface Unit<S>
