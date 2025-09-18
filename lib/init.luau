@@ -43,7 +43,7 @@ export type State<S> = {
 --- @field beforeChange TransitionCallback<S>? -- Called before changing any state
 --- @field afterChange TransitionCallback<S>? -- Called after changing any state
 --- @field canTransition TransitionCallback<S>? -- Predicate function before changing any state
---- @field onError (error: string) -> ()?, -- If changing the state errors, onError will be called with the error message for internal handling
+--- @field onError (error: string) -> ()?, -- -- Called whenever a lifecycle hook, subscriber, or middleware throws an error
 export type Middleware<S> = {
 	beforeChange: TransitionCallback<S>?,
 	afterChange: TransitionCallback<S>?,
