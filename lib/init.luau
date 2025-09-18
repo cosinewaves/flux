@@ -92,6 +92,21 @@ export type Unit<S> = {
 	and also handle functions like subscription callbacks and changing states. 
 ]=]
 
+-- safely call a function with traceback
+local function safeCall(self, fn, ...)
+	if not fn then
+		return
+	end
+	local ok, result = xpcall(fn, debug.traceback, ...)
+	if not ok then
+		for _, mw in self.__middleware do
+			if mw.onError then
+				mw.onError(result) -- full traceback
+			end
+		end
+	end
+end
+
 return function<S>(initialState: S): Unit<S>
 	assert(initialState, "(flux) initialState resolved to false or nil")
 
