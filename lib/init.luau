@@ -154,63 +154,56 @@ return function<S>(initialState: S): Unit<S>
 ]=]
 	self.changeState = function(self: Unit<S>, newState: S, eager: boolean?): ()
 		local old = self.state
+
+		-- lazy evaluation: skip if state unchanged and not eager
 		if not eager and old == newState then
 			return
 		end
 
-		-- check middleware guard
+		-- check guard middleware
 		for _, mw in self.__middleware do
 			if mw.canTransition and not mw.canTransition(old, newState) then
 				return -- blocked
 			end
 		end
 
-		-- try actual transition
-		local success, err = pcall(function()
-			local oldStateObj = self.__states[old]
-			local newStateObj = self.__states[newState]
-
-			-- exit old
-			if oldStateObj then
-				if oldStateObj.onBeforeExit then
-					oldStateObj.onBeforeExit()
-				end
-				if oldStateObj.onExit then
-					oldStateObj.onExit()
-				end
-				if oldStateObj.onAfterExit then
-					oldStateObj.onAfterExit()
-				end
+		-- run beforeChange middleware
+		for _, mw in self.__middleware do
+			if mw.beforeChange then
+				safeCall(self, mw.beforeChange, old, newState)
 			end
+		end
 
-			-- update
-			self.state = newState :: S
+		-- perform transition safely
+		local oldStateObj = self.__states[old]
+		local newStateObj = self.__states[newState]
 
-			-- enter new
-			if newStateObj then
-				if newStateObj.onBeforeEnter then
-					newStateObj.onBeforeEnter()
-				end
-				if newStateObj.onEnter then
-					newStateObj.onEnter()
-				end
-				if newStateObj.onAfterEnter then
-					newStateObj.onAfterEnter()
-				end
-			end
+		-- exit old state
+		if oldStateObj then
+			safeCall(self, oldStateObj.onBeforeExit, self)
+			safeCall(self, oldStateObj.onExit, self)
+			safeCall(self, oldStateObj.onAfterExit, self)
+		end
 
-			-- notify subscribers
-			for _, callback in self.__subscribers do
-				callback(old, newState)
-			end
-		end)
+		-- update current state
+		self.state = newState :: S
 
-		-- handle error middleware
-		if not success then
-			for _, mw in self.__middleware do
-				if mw.onError then
-					mw.onError(err)
-				end
+		-- enter new state
+		if newStateObj then
+			safeCall(self, newStateObj.onBeforeEnter, self)
+			safeCall(self, newStateObj.onEnter, self)
+			safeCall(self, newStateObj.onAfterEnter, self)
+		end
+
+		-- notify subscribers
+		for _, callback in self.__subscribers do
+			safeCall(self, callback, old, newState)
+		end
+
+		-- run afterChange middleware
+		for _, mw in self.__middleware do
+			if mw.afterChange then
+				safeCall(self, mw.afterChange, old, newState)
 			end
 		end
 	end
