@@ -1,11 +1,11 @@
 --!strict
 --!native
 
---- @type StateCallback () -> ()?
+--- @type StateCallback (...any) -> ()?
 --- @within Unit
 --- A function called during a lifecycle event.
 --- Can optionally return another function or nil.
-export type StateCallback = () -> ()?
+export type StateCallback = (...any) -> ()?
 
 --- @type TransitionCallback<S> (oldState: S, newState: S) -> ()
 --- @within Unit
