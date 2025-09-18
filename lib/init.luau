@@ -92,8 +92,10 @@ export type Unit<S> = {
 	and also handle functions like subscription callbacks and changing states. 
 ]=]
 
--- safely call a function with traceback
-local function safeCall(self: Unit<any>, fn, ...)
+-- receives the full error message and traceback (captured via `xpcall`)
+-- the error is suppressed from roblox's default runtime error output, so the machine continues running
+-- multiple `onError` middleware functions may be registered; all will be invoked.
+local function safeCall(self: Unit<any>, fn, ...) -- safely call a function with traceback
 	if not fn then
 		return
 	end
