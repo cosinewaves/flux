@@ -1,11 +1,11 @@
 --!strict
 --!native
 
---- @type StateCallback () -> ()?
+--- @type StateCallback (...any) -> ()?
 --- @within Unit
 --- A function called during a lifecycle event.
 --- Can optionally return another function or nil.
-export type StateCallback = () -> ()?
+export type StateCallback = (...any) -> ()?
 
 --- @type TransitionCallback<S> (oldState: S, newState: S) -> ()
 --- @within Unit
@@ -43,7 +43,7 @@ export type State<S> = {
 --- @field beforeChange TransitionCallback<S>? -- Called before changing any state
 --- @field afterChange TransitionCallback<S>? -- Called after changing any state
 --- @field canTransition TransitionCallback<S>? -- Predicate function before changing any state
---- @field onError (error: string) -> ()?, -- If changing the state errors, onError will be called with the error message for internal handling
+--- @field onError (error: string) -> ()?, -- -- Called whenever a lifecycle hook, subscriber, or middleware throws an error
 export type Middleware<S> = {
 	beforeChange: TransitionCallback<S>?,
 	afterChange: TransitionCallback<S>?,
@@ -91,6 +91,23 @@ export type Unit<S> = {
 	Unit's serve as a state machine within Flux. They contain internal tables holding state and subscribers,
 	and also handle functions like subscription callbacks and changing states. 
 ]=]
+
+-- receives the full error message and traceback (captured via `xpcall`)
+-- the error is suppressed from roblox's default runtime error output, so the machine continues running
+-- multiple `onError` middleware functions may be registered; all will be invoked.
+local function safeCall(self: Unit<any>, fn, ...) -- safely call a function with traceback
+	if not fn then
+		return
+	end
+	local ok, result = xpcall(fn, debug.traceback, ...)
+	if not ok then
+		for _, mw in self.__middleware do
+			if mw.onError then
+				mw.onError(result) -- full traceback
+			end
+		end
+	end
+end
 
 return function<S>(initialState: S): Unit<S>
 	assert(initialState, "(flux) initialState resolved to false or nil")
@@ -154,63 +171,68 @@ return function<S>(initialState: S): Unit<S>
 ]=]
 	self.changeState = function(self: Unit<S>, newState: S, eager: boolean?): ()
 		local old = self.state
+
+		-- lazy evaluation: skip if state unchanged and not eager
 		if not eager and old == newState then
 			return
 		end
 
-		-- check middleware guard
+		-- check guard middleware
 		for _, mw in self.__middleware do
 			if mw.canTransition and not mw.canTransition(old, newState) then
 				return -- blocked
 			end
 		end
 
-		-- try actual transition
-		local success, err = pcall(function()
-			local oldStateObj = self.__states[old]
-			local newStateObj = self.__states[newState]
-
-			-- exit old
-			if oldStateObj then
-				if oldStateObj.onBeforeExit then
-					oldStateObj.onBeforeExit()
-				end
-				if oldStateObj.onExit then
-					oldStateObj.onExit()
-				end
-				if oldStateObj.onAfterExit then
-					oldStateObj.onAfterExit()
-				end
+		-- run beforeChange middleware
+		for _, mw in self.__middleware do
+			if mw.beforeChange then
+				safeCall(self, mw.beforeChange, old, newState)
 			end
+		end
 
-			-- update
-			self.state = newState :: S
+		-- perform transition safely
+		local oldStateObj = self.__states[old]
+		local newStateObj = self.__states[newState]
 
-			-- enter new
-			if newStateObj then
-				if newStateObj.onBeforeEnter then
-					newStateObj.onBeforeEnter()
-				end
-				if newStateObj.onEnter then
-					newStateObj.onEnter()
-				end
-				if newStateObj.onAfterEnter then
-					newStateObj.onAfterEnter()
-				end
+		-- exit old state
+		if oldStateObj then
+			if oldStateObj.onBeforeExit then
+				safeCall(self, oldStateObj.onBeforeExit, self)
 			end
-
-			-- notify subscribers
-			for _, callback in self.__subscribers do
-				callback(old, newState)
+			if oldStateObj.onExit then
+				safeCall(self, oldStateObj.onExit, self)
 			end
-		end)
+			if oldStateObj.onAfterExit then
+				safeCall(self, oldStateObj.onAfterExit, self)
+			end
+		end
 
-		-- handle error middleware
-		if not success then
-			for _, mw in self.__middleware do
-				if mw.onError then
-					mw.onError(err)
-				end
+		-- update current state
+		self.state = newState :: S
+
+		-- enter new state
+		if newStateObj then
+			if newStateObj.onBeforeEnter then
+				safeCall(self, newStateObj.onBeforeEnter, self)
+			end
+			if newStateObj.onEnter then
+				safeCall(self, newStateObj.onEnter, self)
+			end
+			if newStateObj.onAfterEnter then
+				safeCall(self, newStateObj.onAfterEnter, self)
+			end
+		end
+
+		-- notify subscribers
+		for _, callback in self.__subscribers do
+			safeCall(self, callback, old, newState)
+		end
+
+		-- run afterChange middleware
+		for _, mw in self.__middleware do
+			if mw.afterChange then
+				safeCall(self, mw.afterChange, old, newState)
 			end
 		end
 	end
